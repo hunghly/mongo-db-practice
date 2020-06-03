@@ -21,6 +21,42 @@ router.get('/', (req, res, next)=> {
 
 })
 
+router.get('/add', (req, res, next)=>{
+    const details = req.query;
+    Country.create(details)
+        .then((country)=>{
+            res.json({
+                confirmation: 'success',
+                data: country
+            })
+        })
+        .catch((err)=>{
+            res.json({
+                confirmation: 'failed',
+                message: 'failed to create query'
+            })
+        })
+})
+
+router.get('/update/:id', (req, res, next)=>{
+    const updateDetails = req.query;
+    const countryId = req.params.id;
+
+    Country.findByIdAndUpdate(countryId, updateDetails, {new: true})
+        .then((country)=>{
+            res.json({
+                confirmation: 'success',
+                data: country
+            })
+        })
+        .catch((err)=>{
+            res.json({
+                confirmation: 'failed',
+                message: err.message
+            })
+        })
+})
+
 router.get('/:id', (req, res, next)=>{
     console.log("id:" + req.params.id);
     Country.findById(req.params.id)
